@@ -3,8 +3,13 @@ def clean_text(text, ignore_case):
         text = text.lower()
     return text
 
-# added required parameters and also added complete alphabet parameter, to add some modularity to this function, in case 
-def full_alphabet_len(text, ignore_case= True, custom_a= None):
+#Asked for copilot to help in some cases and claude too.
+def full_alphabet_len(text: str, ignore_case: bool = True, custom_a: str = None) -> int:
+    # Helper function to get clean text (only alphabet characters)
+    def clean_text(s: str) -> str:
+        if ignore_case:
+            s = s.lower()
+        return ''.join(c for c in s if c.isalpha())
     
     # Determine alphabet to use
     if custom_a:
@@ -13,13 +18,16 @@ def full_alphabet_len(text, ignore_case= True, custom_a= None):
         alphabet = set('abcdefghijklmnopqrstuvwxyz')
     alphabet_size = len(alphabet)
     
-    text = clean_text(text, ignore_case)
+    text = clean_text(text)
+    if not text:
+        return 0
         
     # Sliding window approach
-    char_count = {} # Here we will store the count of each character in the current window
-    left = 0 # Left pointers position
-    min_length = float('inf') # Minimum length of the window is infinity so that we can update it with the minimum length
-    
+    char_count = {}
+    complete_alphabets = 0
+    left = 0
+    min_length = float('inf')
+        
     for right in range(len(text)):
         current_char = text[right]
         # Add new character to count
